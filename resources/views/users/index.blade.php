@@ -3,23 +3,35 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
-
-          <a href="{{ url('users/create') }}" class="btn btn-success">
+        <div class="col-md-11 offset-md-1">
+            <h1>
+                <i class="fa fa-list"></i>
+                Lista de Usuarios
+            </h1>
+            <hr>
+            <form class="navbar-form navbar-left pull-right" role="search">
+                <!--    {--!! Form::open(['route' => 'categories.index','method' => 'GET', 'class' => 'navbar-form navbar-left pull-right', 'role' => 'search']) !!--} -->
+                    <div  class="form-group">
+                    <!--  {--!! Form::text('name',null,['class' => 'form-control', 'placeholder' => 'Nombre categoria']) !!--} -->
+                       <input type="text" class="form-control" placeholder="Search">
+                       {{-- <button type="submit" class="btn btn-default">Buscar</button> --}}
+                   </div>
+                 </form>
+          <a href="{{ url('users/create') }}" class="btn btn-indigo">
             <i class="fa fa-plus"></i>
             Adicionar Usuario
           </a>
-          <a href="{{ url('generate/pdf/users') }}" class="btn btn-indigo">
+          <a href="{{ url('generate/pdf/users') }}" class="btn btn-danger">
             <i class="fa fa-file-pdf"></i>
             Generar Reporte PDF
           </a>
-          <a href="{{ url('generate/excel/users') }}" class="btn btn-indigo">
+          <a href="{{ url('generate/excel/users') }}" class="btn btn-danger">
             <i class="fa fa-file-excel"></i>
             Generar Reporte Excel
           </a>
           <br><br>
             <table class="table table-striped table-bordered">
-                <thead>
+                <thead class="thead-dark">
                   <tr>
                     <th>Nombre Completo</th>
                     <th class="d-none d-sm-table-cell">Correo Electrónico</th>

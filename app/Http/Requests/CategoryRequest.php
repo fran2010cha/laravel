@@ -21,29 +21,39 @@ class CategoryRequest extends FormRequest
      *
      * @return array
      */
+    // public function rules()
+    // {
+    //     if($this->method('put')) {
+    //         return [
+    //             'name'  => 'required|min:10',
+    //             'description'     => 'required,'.$this->id,
+    //         ];
+    //     } else {
+    //         return [
+    //             'name'  => 'required|min:10',
+    //             'description'     => 'required|email|unique:users',
+    //         ];
+    //     }
+
+
+    // }
+    // public function messages() {
+    //     return [
+    //         'name.required'  => 'El campo Nombre Completo es obligatorio.',
+    //         'description.required'       => 'El campo descripcion es requerido.',
+    //     ];
+    // }
     public function rules()
     {
-        if($this->method('put')) {
-            return [
-                'name'  => 'required|min:10',
-                'description'     => 'required,'.$this->id,
-            ];
-        } else {
-            return [
-                'name'  => 'required|min:10',
-                'description'     => 'required|email|unique:users',
-                'image'     => 'required|image|max:1000',
-            ];
-        }
-
-
+        return [
+            'name'         => 'required',
+            'description'  => 'required',
+        ];
     }
     public function messages() {
         return [
-            'name.required'  => 'El campo Nombre Completo es obligatorio.',
-            'description.required'       => 'El campo descripcion es requerido.',
-            'image.required'     => 'El campo Foto es obligatorio.',
+            'name.required'        => 'El Nombre es requerido.',
+            'description.required' => 'La Descripción es requerida.',
         ];
     }
-
 }

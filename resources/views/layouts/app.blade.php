@@ -23,9 +23,10 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-indigo shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+                    <i class="fa fa-home"></i>
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -38,8 +39,8 @@
                         @auth
                             <li>
                                 <a class="nav-item nav-link" href="{{ url('home') }}">
-                                    <i class="fa fa-home"></i>
-                                    Inicio
+                                    <i class="fa fa-star" ></i>
+                                    Modulos
                                 </a>
                             </li>
                         @endauth
@@ -51,14 +52,14 @@
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">
-                                    <i class="fa fa-lock"></i> 
+                                    <i class="fa fa-lock"></i>
                                     Ingreso
                                 </a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">
-                                        <i class="fa fa-user"></i> 
+                                        <i class="fa fa-user"></i>
                                         Registro
                                     </a>
                                 </li>
@@ -128,6 +129,16 @@
                   }
                 })
             });
+             /* - - - - - - - - - - - - - - - - - - - */
+            $('body').on('change', '#catid', function(event) {
+                event.preventDefault();
+                $cid = $(this).val();
+                $tk  = $('input[name=_token]').val();
+                $.post('loadcat', {cid: $cid, _token: $tk}, function(data) {
+                    $("#content").hide().fadeIn(1200).html(data);
+                });
+            });
+            /* - - - - - - - - - - - - - - - - - - - */
             // -----------------------------------------------
             @if (session('message'))
                 Swal.fire(

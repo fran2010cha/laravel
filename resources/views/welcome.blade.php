@@ -1,109 +1,84 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-        <title>Laravel Sena</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <form class="navbar-form navbar-left pull-right" role="search">
-            <!--    {--!! Form::open(['route' => 'categories.index','method' => 'GET', 'class' => 'navbar-form navbar-left pull-right', 'role' => 'search']) !!--} -->
-                <div  class="form-group">
-                <!--  {--!! Form::text('name',null,['class' => 'form-control', 'placeholder' => 'Nombre categoria']) !!--} -->
-                   <input type="text" class="form-control" placeholder="Search">
-               </div>
-               <button type="submit" class="btn btn-default">Buscar</button>
-               </form>
-             <!-- {--!! Form::close() !!--} -->
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="bd-example">
+              <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  @foreach ($arts as $key => $art)
+                      <li data-target="#carouselExampleCaptions" data-slide-to="{{ $key }}" class="@if($key == 0) active @endif"></li>
+                  @endforeach
+                </ol>
+                <div class="carousel-inner">
+                    @foreach ($arts as $key => $art)
+                      <div class="carousel-item @if($key == 0) active @endif">
+                        <figure style="background-image: url({{ asset($art->image) }})"></figure>
+                        <div class="carousel-caption d-none d-md-block bg-white text-dark">
+                          <h3>{{ $art->name }}</h3>
+                          <p>{{ $art->description }}</p>
+                        </div>
+                      </div>
+                    @endforeach
                 </div>
-            @endif
-
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Sena laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="row">
+      <div class="col-xl-2 offset-xl-5">
+        <div class="form-group">
+          <label for="catid"> <i class="fa fa-filter"></i> Filtrar por Categoria:</label>
+          @csrf
+          <select name="catid" id="catid" class="form-control">
+            <option value="">Seleccione...</option>
+            <option value="0">Todas</option>
+            @foreach ($cats as $cat)
+              <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12" id="content">
+        @foreach ($cats as $cat)
+          <h3 class="h3"> <i class="fa fa-list"></i> {{ $cat->name }}</h3>
+          <hr>
+          <div class="row">
+            @foreach ($artsbycats as $abc)
+              @if ($abc->category_id == $cat->id)
+              <div class="col-xl-3 mb-4">
+                <div class="card" style="height: 26rem">
+                    <img src="{{ asset($abc->image) }}" class="card-img-top">
+                    <div class="card-body">
+                      <span class="badge badge-dark"> {{ $abc->category->name }} </span>
+                      <h5 class="card-title">{{ $abc->name }}</h5>
+                      <p class="card-text">{{ $abc->description }}</p>
+                      <a href="{{ url('articles/'.$abc->id) }}" class="btn btn-danger">
+                        Ver <i class="fa fa-plus"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                @endif
+            @endforeach
+        </div>
+        @endforeach
+      </div>
+    </div>
+
+
+</div>
+
+@endsection

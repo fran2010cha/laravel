@@ -3,9 +3,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\CategoryRequest;
+use App\Exports\CategoriesExport;
+
 
 class CategoryController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +27,8 @@ class CategoryController extends Controller
     public function index()
     {
         //$users = User::all();
-        $categories = Category::all();
-        return view('categories.index')->with('categories', $categories);
+        $cats = Category::all();
+        return view('categories.index')->with('cats', $cats);
     }
 
     /**
@@ -35,10 +48,19 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(CategoryRequest $request)
     {
-        //
+        $cat = new Category;
+        $cat->name        = $request->name;
+        $cat->description = $request->description;
+
+
+        if($cat->save()) {
+            return redirect('categories')->with('message', 'La Categoría '.$cat->name.' fue creada con exito!');
+       }
     }
+
 
     /**
      * Display the specified resource.
@@ -48,7 +70,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $cat = Category::find($id);
+        return view('categories.show')->with('cat', $cat);
     }
 
     /**
@@ -59,7 +82,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $cat = Category::find($id);
+        return view('categories.edit')->with('cat', $cat);
     }
 
     /**
@@ -69,10 +93,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $cat = Category::find($id);
+        $cat->name        = $request->name;
+        $cat->description = $request->description;
+        if($cat->save()) {
+            return redirect('categories')->with('message', 'La Categoría '.$cat->name.' fue editada con exito!');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -82,6 +112,21 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cat = Category::find($id);
+        if ($cat->delete()) {
+            return redirect()->back()->with('message', 'La Categoria '.$cat->name.' fue eliminada con exito!');
+        }
+    }
+
+    public function pdf() {
+        $cat = Category::all();
+        $pdf = \PDF::loadView('categories.pdf', compact('categories'));
+        return $pdf->download('categories.pdf');
+    }
+    public function excel() {
+        return \Excel::download(new CategoriesExport, 'categories.xlsx' );
+         // $users = User::all();
+        // $pdf = \PDF::loadView('users.pdf', compact('users'));
+        // return $pdf->download('users.pdf');
     }
 }

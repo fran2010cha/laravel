@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@welcome');
+
 // Get: URL/URI
 Route::get('helloworld', function() {
 	return dd('Hola Mundo Laravel');
@@ -45,11 +44,21 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Resources
 Route::resource('users', 'UserController');
 Route::resource('categories', 'CategoryController');
+Route::resource('articles', 'ArticleController');
+
 
 // Reports
 Route::get('generate/pdf/users', 'UserController@pdf');
 Route::get('generate/excel/users', 'UserController@excel');
 
+// Reports categories
+Route::get('generate/pdf/categories', 'CategoryController@pdf');
+Route::get('generate/excel/categories', 'CategoryController@excel');
 
+Route::get('generate/excel/articles', 'ArticleController@excel');
+Route::get('generate/pdf/articles', 'ArticleController@pdf');
+
+// Ajax
+Route::post('loadcat', 'HomeController@loadcat');
 
 

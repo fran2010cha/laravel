@@ -42,7 +42,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                         <div class="form-group">
                             <label for="description" class="text-md-right">Descripcion</label>
 
                             <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" autocomplete="description">
@@ -53,7 +53,7 @@
                                 </span>
                             @enderror
                         </div>
-
+                        {{--
                         <div class="form-group">
                             <label for="image" class="text-md-right">Foto</label>
 
@@ -73,12 +73,16 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-indigo btn-block">
                                 <i class="fa fa-save"></i>
                                 Adicionar
+                            </button>
+                            <button class="btn btn-light btn-lg" type="reset">
+                                <i class="fa fa-trash"></i>
+                                Limpiar
                             </button>
                         </div>
             </form>
